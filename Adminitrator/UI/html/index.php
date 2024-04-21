@@ -335,7 +335,7 @@ if ($userRole == ROLE_ADMIN || $userRole == ROLE_MARKETING_MANAGER) {
                 }
                 ?>
                 <?php
-                $sql = "SELECT accessedPage, COUNT(*) AS pageViews FROM accesslog GROUP BY accessedPage";
+                $sql = "SELECT SUBSTRING_INDEX(accessedPage, '&id', 1) AS basePage, COUNT(*) AS pageViews FROM accesslog GROUP BY basePage";
                 $result = mysqli_query($conn, $sql);
 
                 // Ánh xạ giữa accessedPage và nhãn tương ứng
@@ -354,7 +354,7 @@ if ($userRole == ROLE_ADMIN || $userRole == ROLE_MARKETING_MANAGER) {
                 $pageViews = array();
 
                 while ($row = mysqli_fetch_assoc($result)) {
-                    $accessedPage = $row['accessedPage'];
+                    $accessedPage = $row['basePage'];
 
                     // Trích xuất phần query string từ đường dẫn URL
                     $query = parse_url($accessedPage, PHP_URL_QUERY);
@@ -379,12 +379,10 @@ if ($userRole == ROLE_ADMIN || $userRole == ROLE_MARKETING_MANAGER) {
                 }
 
 
-
-
                 // Truy vấn SQL để lấy thông tin về số lần hoạt động của từng người dùng
                 $sqlUserActivity = "SELECT u.Name, COUNT(a.userId) AS activityCount 
                     FROM users u 
-                    LEFT JOIN accesslog a ON u.userId = a.userId 
+                    INNER JOIN accesslog a ON u.userId = a.userId 
                     GROUP BY a.userId";
                 $resultUserActivity = mysqli_query($conn, $sqlUserActivity);
 
@@ -465,8 +463,6 @@ WHERE
 GROUP BY 
     faculties.facultyId, faculties.facultyName;
     ";
-
-
 
                 $result1 = $conn->query($sql1);
 
@@ -556,7 +552,7 @@ AND articleId NOT IN (
                             <select class="form-select" name="year" id="year">
                                 <option value="">All year</option>
                                 <?php
-                                $sql_year = "SELECT magazineYear FROM magazine";
+                                $sql_year = "SELECT magazineYear FROM magazine GROUP BY magazineYear";
                                 $result_year = mysqli_query($conn, $sql_year);
                                 while ($row_year = mysqli_fetch_assoc($result_year)) {
                                     echo "<option value='" . $row_year['magazineYear'] . "'>" . $row_year['magazineYear'] . "</option>";
@@ -630,38 +626,20 @@ AND articleId NOT IN (
                             </div>
                             <div class="row mt-4">
                                 <!-- First column for Magazine -->
-                                <div class="col-lg-6">
+                                <div class="col-lg-12">
                                     <div class="card w-100">
                                         <div class="card-body p-4 text-center">
                                             <h5 class="card-title fw-semibold mb-4">Number of Articles by Magazine</h5>
-                                            <div class="chart-container" style="position: relative; height: 400px;">
+                                            <div class="chart-container d-flex justify-content-center align-items-center"
+                                                style="height: 400px;">
                                                 <canvas id="magazineChart"></canvas>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
 
-                                <!-- Second column for Faculty -->
-                                <div class="col-lg-6">
-                                    <div class="card w-100">
-                                        <div class="card-body p-4">
-                                            <h5 class="card-title fw-semibold mb-4 text-center">Number of Articles by
-                                                Faculty
-                                                <?php
-                                                if (isset($_GET['year'])) {
-                                                    // Lấy giá trị năm từ yêu cầu GET
-                                                    $selectedYear = $_GET['year'];
 
-                                                    // Thêm điều kiện vào câu truy vấn để chỉ lấy dữ liệu cho năm được chọn
-                                                    echo "in $selectedYear";
-                                                } ?>
-                                            </h5>
-                                            <div class="chart-container" style="position: relative; height: 400px;">
-                                                <canvas id="articleChart"></canvas>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+
                             </div>
 
                             <!-- New row for Year -->
@@ -714,7 +692,7 @@ AND articleId NOT IN (
                                 <div class="col-lg-12">
                                     <div class="card w-100">
                                         <div class="card-body p-4 text-center">
-                                            <h5 class="card-title fw-semibold mb-4">No comment</h5>
+                                            <h5 class="card-title fw-semibold mb-4">Number of articles without comments</h5>
                                             <div class="chart-container" style="position: relative; height: 400px;">
                                                 <canvas id="noCommentChart"></canvas>
                                             </div>
@@ -726,7 +704,8 @@ AND articleId NOT IN (
                                 <div class="col-lg-12">
                                     <div class="card w-100">
                                         <div class="card-body p-4 text-center">
-                                            <h5 class="card-title fw-semibold mb-4">No comment</h5>
+                                            <h5 class="card-title fw-semibold mb-4">Number of articles without comment for
+                                                14 days</h5>
                                             <div class="chart-container" style="position: relative; height: 400px;">
                                                 <canvas id="myChart"></canvas>
                                             </div>
@@ -866,7 +845,7 @@ AND articleId NOT IN (
                 data: {
                     labels: facultyNames, // Tên của các khoa
                     datasets: [{
-                        label: 'Percentage of Articles', // Chú thích cho dữ liệu biểu đồ
+                        label: 'Number of Articles', // Chú thích cho dữ liệu biểu đồ
                         data: percentArticles, // Tỷ lệ phần trăm bài báo cáo cho từng khoa
                         backgroundColor: colors, // Mảng màu cho các cột
                         borderColor: colors.map(color => color.replace('0.5', '1')), // Viền của các cột
@@ -1115,13 +1094,6 @@ AND articleId NOT IN (
                         ],
                         borderWidth: 1
                     }]
-                },
-                options: {
-                    scales: {
-                        y: {
-                            beginAtZero: true
-                        }
-                    }
                 }
             });
         </script>
@@ -1334,9 +1306,9 @@ AND articleId NOT IN (
                     <?php
                     $sqlMagazine = "SELECT m.magazineId, m.magazineName, f.facultyId, f.facultyName, COUNT(a.articleId) AS numArticles
                 FROM faculties f
-                LEFT JOIN users u ON f.facultyId = u.facultyId
-                LEFT JOIN articles a ON u.userId = a.authorId
-                LEFT JOIN magazine m ON a.magazineId = m.magazineId
+                INNER JOIN users u ON f.facultyId = u.facultyId
+                INNER JOIN articles a ON u.userId = a.authorId
+                INNER JOIN magazine m ON a.magazineId = m.magazineId
                 WHERE f.facultyId = (SELECT facultyId FROM users WHERE userId = $userId)
                 GROUP BY m.magazineId, m.magazineName, f.facultyId, f.facultyName";
 
