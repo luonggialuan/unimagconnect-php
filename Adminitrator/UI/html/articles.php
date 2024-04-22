@@ -12,8 +12,8 @@ checkAccess([ROLE_MARKETING_COORDINATOR], $conn);
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Modernize Free</title>
-    <link rel="shortcut icon" type="image/png" href="../assets/images/logos/favicon.png" />
+    <title>UniMagConnect</title>
+    <!-- <link rel="shortcut icon" type="image/png" href="../assets/images/logos/favicon.png" /> -->
     <link rel="stylesheet" href="../assets/css/styles.min.css" />
 
 
@@ -30,7 +30,7 @@ checkAccess([ROLE_MARKETING_COORDINATOR], $conn);
     <!-- End layout styles -->
 
     <link rel="shortcut icon" href="../../assets/assets_table/images/favicon.png" />
-    <link rel="shortcut icon" type="image/png" href="../assets/images/logos/favicon.png" />
+    <!-- <link rel="shortcut icon" type="image/png" href="../assets/images/logos/favicon.png" /> -->
     <link rel="stylesheet" href="../assets/css/styles.min.css" />
     <link rel="stylesheet" href="../assets/css/dataTables.bootstrap5.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -325,7 +325,7 @@ checkAccess([ROLE_MARKETING_COORDINATOR], $conn);
                     </table>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                 </div>
             </div>
         </div>

@@ -103,13 +103,15 @@
 		$password = mysqli_real_escape_string($conn, $_POST['password']);
 
 		// Search for the user by username
-		$result = mysqli_query($conn, "SELECT userId, username, password, roleId, status, lastLogin FROM users WHERE username='$username'");
+		$result = mysqli_query($conn, "SELECT userId, username, password, users.roleId, roleName, status, lastLogin FROM users
+		INNER JOIN roles ON users.roleId = roles.roleId WHERE username='$username'");
 
 		// Check if the user exists
 		if (mysqli_num_rows($result) == 1) {
 			$row = mysqli_fetch_assoc($result);
 			$hashed_password = $row['password'];
 			$status = $row['status'];
+			$roleName = $row['roleName'];
 
 			// Check if the account is approved
 			if ($status == 0) {
@@ -174,7 +176,7 @@
 					echo '<script>';
 					echo 'Swal.fire({';
 					echo '    title: "Redirecting...",';
-					echo '    text: "You will be redirected to the admin page shortly.",';
+					echo '    text: "You will be redirected to the ' . $roleName . ' page shortly.",';
 					echo '    icon: "info",';
 					echo '    showConfirmButton: false';
 					echo '});';

@@ -11,8 +11,8 @@ checkAccess([ROLE_ADMIN], $conn);
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Modernize Free</title>
-    <link rel="shortcut icon" type="image/png" href="../assets/images/logos/favicon.png" />
+    <title>UniMagConnect</title>
+    <!-- <link rel="shortcut icon" type="image/png" href="../assets/images/logos/favicon.png" /> -->
     <link rel="stylesheet" href="../assets/css/styles.min.css" />
 
 
@@ -28,7 +28,7 @@ checkAccess([ROLE_ADMIN], $conn);
     <!-- Layout styles -->
     <!-- End layout styles -->
 
-    <link rel="shortcut icon" href="../assets/assets_table/images/favicon.png" />
+    <!-- <link rel="shortcut icon" href="../assets/assets_table/images/favicon.png" /> -->
     <style>
     .switch {
         position: relative;

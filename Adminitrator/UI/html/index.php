@@ -13,8 +13,8 @@ $userRole = getUserRole($conn);
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Modernize Free</title>
-    <link rel="shortcut icon" type="image/png" href="../assets/images/logos/favicon.png" />
+    <title>UniMagConnect</title>
+    <!-- <link rel="shortcut icon" type="image/png" href="../assets/images/logos/favicon.png" /> -->
     <link rel="stylesheet" href="../assets/css/styles.min.css" />
 
 
@@ -30,7 +30,7 @@ $userRole = getUserRole($conn);
     <!-- Layout styles -->
     <!-- End layout styles -->
 
-    <link rel="shortcut icon" href="../assets/assets_table/images/favicon.png" />
+    <!-- <link rel="shortcut icon" href="../assets/assets_table/images/favicon.png" /> -->
     <style>
         .contribution-box {
             width: 200px;
@@ -546,7 +546,7 @@ AND articleId NOT IN (
                 <div class="container-fluid">
                     <form class="row g-3" method="GET" action="">
                         <div class="col-auto">
-                            <label for="year" class="col-form-label">Chose year:</label>
+                            <label for="year" class="col-form-label">Choose year:</label>
                         </div>
                         <div class="col-auto">
                             <select class="form-select" name="year" id="year">
@@ -575,12 +575,16 @@ AND articleId NOT IN (
                                         <span class="label">Article</span>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
-                                    <div class="contribution-box" style="background-color: #2ecc71;">
-                                        <span id="contributors-count"><?php echo number_format($totalAccounts); ?></span>
-                                        <span class="label">Accounts</span>
+                                <?php
+                                if ($userRole == ROLE_ADMIN) {
+                                    ?>
+                                    <div class="col-md-4">
+                                        <div class="contribution-box" style="background-color: #2ecc71;">
+                                            <span id="contributors-count"><?php echo number_format($totalAccounts); ?></span>
+                                            <span class="label">Accounts</span>
+                                        </div>
                                     </div>
-                                </div>
+                                <?php } ?>
                                 <div class="col-md-4">
                                     <div class="contribution-box" style="background-color: #f39c12;">
                                         <span
@@ -589,35 +593,40 @@ AND articleId NOT IN (
                                     </div>
                                 </div>
                             </div>
-                            <div class="row mt-4">
-                                <!-- Biểu đồ cho trang truy cập -->
-                                <div class="col-lg-4">
-                                    <h2 class="text-center">Page Access</h2>
-                                    <div class="chart-container" style="position: relative; height: 400px;">
-                                        <canvas id="pageAccessChart" width="400" height="400"></canvas>
+                            <?php
+                            if ($userRole == ROLE_ADMIN) {
+                                ?>
+                                <div class="row mt-4">
+                                    <!-- Biểu đồ cho trang truy cập -->
+                                    <div class="col-lg-4">
+                                        <h2 class="text-center">Page Access</h2>
+                                        <div class="chart-container" style="position: relative; height: 400px;">
+                                            <canvas id="pageAccessChart" width="400" height="400"></canvas>
+                                        </div>
+                                    </div>
+                                    <!-- Biểu đồ cho hoạt động người dùng -->
+                                    <div class="col-lg-4">
+                                        <h2 class="text-center">User Activity</h2>
+                                        <div class="chart-container" style="position: relative; height: 400px;">
+                                            <canvas id="userActivityChart" width="400" height="400"></canvas>
+                                        </div>
+                                    </div>
+                                    <!-- Biểu đồ cho việc sử dụng trình duyệt -->
+                                    <div class="col-lg-4">
+                                        <h2 class="text-center">Browser Usage</h2>
+                                        <div class="chart-container" style="position: relative; height: 400px;">
+                                            <canvas id="browserUsageChart" width="400" height="400"></canvas>
+                                        </div>
                                     </div>
                                 </div>
-                                <!-- Biểu đồ cho hoạt động người dùng -->
-                                <div class="col-lg-4">
-                                    <h2 class="text-center">User Activity</h2>
-                                    <div class="chart-container" style="position: relative; height: 400px;">
-                                        <canvas id="userActivityChart" width="400" height="400"></canvas>
-                                    </div>
-                                </div>
-                                <!-- Biểu đồ cho việc sử dụng trình duyệt -->
-                                <div class="col-lg-4">
-                                    <h2 class="text-center">Browser Usage</h2>
-                                    <div class="chart-container" style="position: relative; height: 400px;">
-                                        <canvas id="browserUsageChart" width="400" height="400"></canvas>
-                                    </div>
-                                </div>
-                            </div>
+                            <?php } ?>
                             <div class="row mt-4">
                                 <div class="col-lg-12">
                                     <div class="card w-100">
                                         <div class="card-body p-4 text-center">
-                                            <h5 class="card-title fw-semibold mb-4">Number of Contribuildtor</h5>
-                                            <div class="chart-container" style="position: relative; height: 400px;">
+                                            <h5 class="card-title fw-semibold mb-4">Number of Contributor</h5>
+                                            <div class="chart-container d-flex justify-content-center align-items-center"
+                                                style="position: relative; height: 400px;">
                                                 <canvas id="facultyContribuildtorChart"></canvas>
                                             </div>
                                         </div>
@@ -641,13 +650,25 @@ AND articleId NOT IN (
 
 
                             </div>
-
+                            <div class="row mt-4">
+                                <div class="col-lg-12">
+                                    <div class="card w-100">
+                                        <div class="card-body p-4 text-center">
+                                            <h5 class="card-title fw-semibold mb-4">Number of Articles by Faculties</h5>
+                                            <div class="chart-container d-flex justify-content-center align-items-center"
+                                                style="position: relative; height: 400px;">
+                                                <canvas id="facultyChart"></canvas>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                             <!-- New row for Year -->
                             <div class="row mt-4">
                                 <div class="col-lg-12">
                                     <div class="card w-100">
                                         <div class="card-body p-4 text-center">
-                                            <h5 class="card-title fw-semibold mb-4">Contribution rate of each department
+                                            <h5 class="card-title fw-semibold mb-4">Contribution rate of each Faculty
                                                 during the year
                                                 learn in <?php
                                                 if (isset($_GET['year'])) {
@@ -657,31 +678,22 @@ AND articleId NOT IN (
                                                     // Thêm điều kiện vào câu truy vấn để chỉ lấy dữ liệu cho năm được chọn
                                                     echo "in $selectedYear";
                                                 } ?></h5>
-                                            <div class="chart-container" style="position: relative; height: 400px;">
+                                            <div class="chart-container d-flex justify-content-center align-items-center"
+                                                style="position: relative; height: 400px;">
                                                 <canvas id="chart1"></canvas>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="row mt-4">
-                                <div class="col-lg-12">
-                                    <div class="card w-100">
-                                        <div class="card-body p-4 text-center">
-                                            <h5 class="card-title fw-semibold mb-4">Faculty Articles Chart</h5>
-                                            <div class="chart-container" style="position: relative; height: 400px;">
-                                                <canvas id="facultyChart"></canvas>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+
                             <div class="row mt-4">
                                 <div class="col-lg-12">
                                     <div class="card w-100">
                                         <div class="card-body p-4 text-center">
                                             <h5 class="card-title fw-semibold mb-4">Magazine Approval Ratio</h5>
-                                            <div class="chart-container" style="position: relative; height: 400px;">
+                                            <div class="chart-container d-flex justify-content-center align-items-center"
+                                                style="position: relative; height: 400px;">
                                                 <canvas id="approvalRatioChart"></canvas>
                                             </div>
                                         </div>
@@ -693,7 +705,8 @@ AND articleId NOT IN (
                                     <div class="card w-100">
                                         <div class="card-body p-4 text-center">
                                             <h5 class="card-title fw-semibold mb-4">Number of articles without comments</h5>
-                                            <div class="chart-container" style="position: relative; height: 400px;">
+                                            <div class="chart-container d-flex justify-content-center align-items-center"
+                                                style="position: relative; height: 400px;">
                                                 <canvas id="noCommentChart"></canvas>
                                             </div>
                                         </div>
@@ -706,7 +719,8 @@ AND articleId NOT IN (
                                         <div class="card-body p-4 text-center">
                                             <h5 class="card-title fw-semibold mb-4">Number of articles without comment for
                                                 14 days</h5>
-                                            <div class="chart-container" style="position: relative; height: 400px;">
+                                            <div class="chart-container d-flex justify-content-center align-items-center"
+                                                style="position: relative; height: 400px;">
                                                 <canvas id="myChart"></canvas>
                                             </div>
                                         </div>
@@ -889,7 +903,7 @@ AND articleId NOT IN (
 
             var magazineCtx = document.getElementById('magazineChart').getContext('2d');
             var magazineChart = new Chart(magazineCtx, {
-                type: 'pie',
+                type: 'bar',
                 data: {
                     labels: magazineNames,
                     datasets: [{
@@ -1070,7 +1084,7 @@ AND articleId NOT IN (
 
             var browserUsageCtx = document.getElementById('browserUsageChart').getContext('2d');
             var browserUsageChart = new Chart(browserUsageCtx, {
-                type: 'pie',
+                type: 'bar',
                 data: {
                     labels: <?php echo json_encode($browserLabels); ?>,
                     datasets: [{
@@ -1143,34 +1157,32 @@ AND articleId NOT IN (
                 barColors.push(getRandomColor()); // Hàm này sẽ tạo màu sắc ngẫu nhiên, bạn có thể thay thế bằng logic của mình
             }
 
-            // Tạo biểu đồ
             var ctx = document.getElementById('chart1').getContext('2d');
+
+            var fixedColors = [
+                'rgba(255, 99, 132, 0.8)',
+                'rgba(54, 162, 235, 0.8)',
+                'rgba(255, 206, 86, 0.8)',
+                'rgba(75, 192, 192, 0.8)',
+                'rgba(153, 102, 255, 0.8)'
+            ];
+
             var facultyChart = new Chart(ctx, {
-                type: 'bar',
+                type: 'pie',
                 data: {
                     labels: facultyNames,
                     datasets: [{
                         label: 'Contribution Percentage (%)',
                         data: contributionPercentages,
-                        backgroundColor: barColors, // Sử dụng màu sắc riêng cho từng cột
+                        backgroundColor: fixedColors,
                         borderColor: 'rgba(54, 162, 235, 1)',
                         borderWidth: 1
                     }]
                 },
                 options: {
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            ticks: {
-                                callback: function (value) {
-                                    return value + '%'; // Thêm dấu % vào trục y
-                                }
-                            }
-                        }
-                    },
                     plugins: {
                         legend: {
-                            display: false // Ẩn chú thích mặc định
+                            display: true
                         }
                     },
                     onClick: function (evt, element) {
@@ -1183,11 +1195,12 @@ AND articleId NOT IN (
                             var idx = activePoints[0].index;
                             var label = chartData.labels[idx];
                             var value = chartData.datasets[0].data[idx];
-                            alert(label + ': ' + value + '%'); // Hiển thị phần trăm khi nhấp vào cột
+                            alert(label + ': ' + value + '%');
                         }
                     }
                 }
             });
+
 
             // Hàm tạo màu sắc ngẫu nhiên
             function getRandomColor() {
@@ -1424,7 +1437,8 @@ AND articleId NOT IN (
                                                 <h5 class="card-title fw-semibold mb-4">Number of Articles
                                                 <?= $facultyNameOnly ?> by Magazine
                                                 </h5>
-                                                <div class="chart-container" style="position: relative; height: 400px;">
+                                                <div class="chart-container d-flex justify-content-center align-items-center"
+                                                    style="position: relative; height: 400px;">
                                                     <canvas id="magazineChart"></canvas>
                                                 </div>
                                             </div>
@@ -1438,7 +1452,8 @@ AND articleId NOT IN (
                                                 <h5 class="card-title fw-semibold mb-4 text-center">Number of Articles by
                                                 <?= $facultyNameOnly ?>
                                                 </h5>
-                                                <div class="chart-container" style="position: relative; height: 400px;">
+                                                <div class="chart-container d-flex justify-content-center align-items-center"
+                                                    style="position: relative; height: 400px;">
                                                     <canvas id="articleChart"></canvas>
                                                 </div>
                                             </div>
@@ -1454,7 +1469,8 @@ AND articleId NOT IN (
                                                 <h5 class="card-title fw-semibold mb-4">Number of Articles
                                                 <?= $facultyNameOnly ?> by Year
                                                 </h5>
-                                                <div class="chart-container" style="position: relative; height: 400px;">
+                                                <div class="chart-container d-flex justify-content-center align-items-center"
+                                                    style="position: relative; height: 400px;">
                                                     <canvas id="yearChart"></canvas>
                                                 </div>
                                             </div>
@@ -1466,9 +1482,10 @@ AND articleId NOT IN (
                                         <div class="card w-100">
                                             <div class="card-body p-4 text-center">
                                                 <h5 class="card-title fw-semibold mb-4">
-                                                <?= $facultyNameOnly ?> Articles Chart
+                                                    Number of Articles by <?= $facultyNameOnly ?>
                                                 </h5>
-                                                <div class="chart-container" style="position: relative; height: 400px;">
+                                                <div class="chart-container d-flex justify-content-center align-items-center"
+                                                    style="position: relative; height: 400px;">
                                                     <canvas id="facultyChart"></canvas>
                                                 </div>
                                             </div>
@@ -1480,7 +1497,8 @@ AND articleId NOT IN (
                                         <div class="card w-100">
                                             <div class="card-body p-4 text-center">
                                                 <h5 class="card-title fw-semibold mb-4">Magazine Approval Ratio</h5>
-                                                <div class="chart-container" style="position: relative; height: 400px;">
+                                                <div class="chart-container d-flex justify-content-center align-items-center"
+                                                    style="position: relative; height: 400px;">
                                                     <canvas id="approvalRatioChart"></canvas>
                                                 </div>
                                             </div>
@@ -1545,14 +1563,14 @@ AND articleId NOT IN (
                     'rgba(75, 192, 192, 0.5)', 'rgba(153, 102, 255, 0.5)', 'rgba(255, 159, 64, 0.5)'
                 ];
 
-                // Vẽ biểu đồ tròn
+                // Vẽ biểu đồ bar
                 var ctx = document.getElementById('articleChart').getContext('2d');
                 var myChart = new Chart(ctx, {
-                    type: 'pie', // Loại biểu đồ tròn
+                    type: 'bar', // Loại biểu đồ bar
                     data: {
                         labels: facultyNames, // Tên của các khoa
                         datasets: [{
-                            label: 'Number of Articles', // Chú thích cho dữ liệu biểu đồ
+                            label: facultyNames, // Chú thích cho dữ liệu biểu đồ
                             data: numArticles, // Số lượng bài báo cáo cho từng khoa
                             backgroundColor: colors, // Mảng màu cho các cột
                             borderColor: colors.map(color => color.replace('0.5', '1')), // Viền của các cột
@@ -1565,10 +1583,6 @@ AND articleId NOT IN (
                                 callbacks: {
                                     label: function (context) {
                                         var label = context.label || '';
-                                        if (label) {
-                                            label += ': ';
-                                        }
-                                        label += context.parsed;
                                         return label;
                                     }
                                 }
@@ -1579,24 +1593,24 @@ AND articleId NOT IN (
             </script>
 
 
+
             <script>
                 var magazineData = <?php echo json_encode($magazineData); ?>;
 
                 var magazineNames = [];
                 var numArticlesByMagazine = [];
+                var magazineColors = ['rgba(255, 99, 132, 0.5)', 'rgba(54, 162, 235, 0.5)', 'rgba(255, 206, 86, 0.5)',
+                    'rgba(75, 192, 192, 0.5)', 'rgba(153, 102, 255, 0.5)', 'rgba(255, 159, 64, 0.5)'
+                ];
 
                 magazineData.forEach(function (item) {
                     magazineNames.push(item.magazineName);
                     numArticlesByMagazine.push(item.numArticles);
                 });
 
-                var magazineColors = ['rgba(255, 99, 132, 0.5)', 'rgba(54, 162, 235, 0.5)', 'rgba(255, 206, 86, 0.5)',
-                    'rgba(75, 192, 192, 0.5)', 'rgba(153, 102, 255, 0.5)', 'rgba(255, 159, 64, 0.5)'
-                ];
-
                 var magazineCtx = document.getElementById('magazineChart').getContext('2d');
                 var magazineChart = new Chart(magazineCtx, {
-                    type: 'pie',
+                    type: 'bar',
                     data: {
                         labels: magazineNames,
                         datasets: [{
@@ -1613,10 +1627,6 @@ AND articleId NOT IN (
                                 callbacks: {
                                     label: function (context) {
                                         var label = context.label || '';
-                                        if (label) {
-                                            label += ': ';
-                                        }
-                                        label += context.parsed;
                                         return label;
                                     }
                                 }
@@ -1625,6 +1635,7 @@ AND articleId NOT IN (
                     }
                 });
             </script>
+
             <script>
                 // Assume you have fetched data from the database and stored it in a variable named 'articlesByYear'
                 var articlesByYear = <?php echo json_encode($articlesByYear); ?>;
@@ -1662,11 +1673,11 @@ AND articleId NOT IN (
                     data: {
                         labels: <?php echo json_encode($facultyNames); ?>,
                         datasets: [{
-                            label: 'Activated Articles',
+                            label: 'Approved Articles',
                             data: <?php echo json_encode($numActivatedArticles); ?>,
                             backgroundColor: 'rgba(54, 162, 235, 0.5)'
                         }, {
-                            label: 'Inactivated Articles',
+                            label: 'Rejected Articles',
                             data: <?php echo json_encode($numInactivatedArticles); ?>,
                             backgroundColor: 'rgba(255, 99, 132, 0.5)'
                         }, {
