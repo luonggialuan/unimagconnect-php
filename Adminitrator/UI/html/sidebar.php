@@ -5,17 +5,13 @@ include_once ("../../../permissions.php");
 
 
 
-// Sử dụng hàm để lấy vai trò của người dùng
 $userRole = getUserRole($conn);
 
-
-// Hàm để kiểm tra xem mục menu có được hiển thị hay không dựa trên vai trò
 function checkUserRole($role, $allowedRoles)
 {
     return in_array($role, $allowedRoles);
 }
 
-// Các mục menu và vai trò được phép truy cập
 $menuItems = array(
     array("name" => "Statistics", "link" => "index.php", "allowedRoles" => [ROLE_MARKETING_COORDINATOR, ROLE_MARKETING_MANAGER, ROLE_ADMIN]),
     array("name" => "Create accounts system", "link" => "register.php", "allowedRoles" => [ROLE_ADMIN]),
@@ -26,6 +22,7 @@ $menuItems = array(
     array("name" => "Articles Management", "link" => "articles.php", "allowedRoles" => [ROLE_MARKETING_COORDINATOR]),
     array("name" => "Approved Articles", "link" => "marketingManager.php", "allowedRoles" => [ROLE_MARKETING_MANAGER]),
 );
+
 $userId = $_SESSION["userid"];
 $faculty_user = '';
 
@@ -67,18 +64,18 @@ if ($row_user["facultyId"]) {
                     <span class="hide-menu">Home</span>
                 </li>
                 <?php foreach ($menuItems as $menuItem): ?>
-                <?php if (checkUserRole($userRole, $menuItem["allowedRoles"])): ?>
-                <li class="sidebar-item">
-                    <a class="sidebar-link" href="<?php echo $menuItem["link"]; ?>" aria-expanded="false">
-                        <span>
-                            <i class="ti ti-layout-dashboard"></i>
-                        </span>
-                        <span class="hide-menu">
-                            <?php echo $menuItem["name"]; ?>
-                        </span>
-                    </a>
-                </li>
-                <?php endif; ?>
+                    <?php if (checkUserRole($userRole, $menuItem["allowedRoles"])): ?>
+                        <li class="sidebar-item">
+                            <a class="sidebar-link" href="<?php echo $menuItem["link"]; ?>" aria-expanded="false">
+                                <span>
+                                    <i class="ti ti-layout-dashboard"></i>
+                                </span>
+                                <span class="hide-menu">
+                                    <?php echo $menuItem["name"]; ?>
+                                </span>
+                            </a>
+                        </li>
+                    <?php endif; ?>
                 <?php endforeach; ?>
             </ul>
         </nav>

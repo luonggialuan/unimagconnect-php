@@ -35,84 +35,84 @@ checkAccess([ROLE_MARKETING_COORDINATOR], $conn);
     <link rel="stylesheet" href="../assets/css/dataTables.bootstrap5.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
-    .no-click {
-        pointer-events: none;
-        opacity: 0.5;
-    }
+        .no-click {
+            pointer-events: none;
+            opacity: 0.5;
+        }
 
-    /* CSS cho nút */
-    .switch {
-        display: inline-flex;
-        /* Sử dụng flexbox để căn giữa chữ bên trong */
-        align-items: center;
-        /* Căn chữ theo chiều dọc */
-        justify-content: center;
-        /* Căn chữ theo chiều ngang */
-        cursor: pointer;
-        width: 70px;
-        /* Điều chỉnh kích thước của nút */
-        height: 30px;
-        /* Điều chỉnh kích thước của nút */
-        border-radius: 30px;
-        /* Đảm bảo góc tròn cho nút */
-        overflow: hidden;
-        position: relative;
-        background-color: #ccc;
-        transition: background-color 0.4s;
-    }
+        /* CSS cho nút */
+        .switch {
+            display: inline-flex;
+            /* Sử dụng flexbox để căn giữa chữ bên trong */
+            align-items: center;
+            /* Căn chữ theo chiều dọc */
+            justify-content: center;
+            /* Căn chữ theo chiều ngang */
+            cursor: pointer;
+            width: 70px;
+            /* Điều chỉnh kích thước của nút */
+            height: 30px;
+            /* Điều chỉnh kích thước của nút */
+            border-radius: 30px;
+            /* Đảm bảo góc tròn cho nút */
+            overflow: hidden;
+            position: relative;
+            background-color: #ccc;
+            transition: background-color 0.4s;
+        }
 
-    /* CSS cho slider (nút trượt) */
-    .slider {
-        /* Các thuộc tính CSS cho slider */
-        position: absolute;
-        cursor: pointer;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        border-radius: 30px;
-        /* Đảm bảo góc tròn cho nút */
-        transition: .4s;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        color: white;
-        /* Màu chữ mặc định */
-        font-size: 14px;
-        /* Kích thước chữ */
-    }
+        /* CSS cho slider (nút trượt) */
+        .slider {
+            /* Các thuộc tính CSS cho slider */
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border-radius: 30px;
+            /* Đảm bảo góc tròn cho nút */
+            transition: .4s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            /* Màu chữ mặc định */
+            font-size: 14px;
+            /* Kích thước chữ */
+        }
 
-    /* Các trạng thái của slider */
-    .slider.active {
-        background-color: green;
-        /* Màu nền cho trạng thái active */
-    }
+        /* Các trạng thái của slider */
+        .slider.active {
+            background-color: green;
+            /* Màu nền cho trạng thái active */
+        }
 
-    .slider.pending {
-        background-color: blue;
-        /* Màu nền cho trạng thái pending */
-    }
+        .slider.pending {
+            background-color: blue;
+            /* Màu nền cho trạng thái pending */
+        }
 
-    .slider.inactive {
-        background-color: red;
-        /* Màu nền cho trạng thái inactive */
-    }
+        .slider.inactive {
+            background-color: red;
+            /* Màu nền cho trạng thái inactive */
+        }
 
 
-    .green {
-        background-color: green;
-        color: white;
-    }
+        .green {
+            background-color: green;
+            color: white;
+        }
 
-    .yellow {
-        background-color: yellow;
-        color: black;
-    }
+        .yellow {
+            background-color: yellow;
+            color: black;
+        }
 
-    .red {
-        background-color: red;
-        color: white;
-    }
+        .red {
+            background-color: red;
+            color: white;
+        }
     </style>
 </head>
 
@@ -161,7 +161,7 @@ checkAccess([ROLE_MARKETING_COORDINATOR], $conn);
         INNER JOIN faculties f ON u.facultyId = f.facultyId
         WHERE u.facultyId = (SELECT facultyId FROM users WHERE userId = '$userId')";
             $result = $conn->query($sql);
-
+            $rowFacultyName = $result->fetch_assoc();
 
             if ($result->num_rows > 0) {
                 // Bắt đầu bảng HTML
@@ -172,7 +172,7 @@ checkAccess([ROLE_MARKETING_COORDINATOR], $conn);
                 echo '<div class="col-lg-12 d-flex align-items-stretch">';
                 echo '<div class="card w-100">';
                 echo '<div class="card-body p-4">';
-                echo '<h5 class="card-title fw-semibold mb-4">Accounts of System</h5>';
+                echo '<h5 class="card-title fw-semibold mb-4">Articles ' . $rowFacultyName['authorFacultyName'] . ' Management</h5>';
                 echo '<br>';
                 echo '<div class="table-responsive">';
                 echo '<table id="dataTableExample" class="table text-nowrap mb-0 align-middle">';
@@ -235,37 +235,37 @@ checkAccess([ROLE_MARKETING_COORDINATOR], $conn);
             
                     // echo '<td class="border-bottom-0"><div class="d-flex align-items-center gap-2"><span class="badge bg-primary rounded-3 fw-semibold">' . $row["status"] . '</span></div></td>';
                     ?>
-            <?php if ($row['showStatus'] != 1) { ?>
-            <td class="border-bottom-0">
-                <div class="d-flex align-items-center gap-2">
-                    <label class="switch" onclick="toggleStatus(this, <?php echo $row['articleId']; ?>)">
-                        <input type="hidden" name="status<?php echo $row['articleId']; ?>"
-                            value="<?php echo $row['status']; ?>">
-                        <span
-                            class="slider <?php echo ($row["status"] == 1) ? 'active' : (($row["status"] == 0) ? 'pending' : 'inactive'); ?>">
-                            <?php echo ($row["status"] == 1) ? 'Approved' : (($row["status"] == 0) ? 'Pending' : 'Rejected'); ?>
-                        </span>
-                    </label>
-                </div>
-            </td>
-            <?php
+                    <?php if ($row['showStatus'] != 1) { ?>
+                        <td class="border-bottom-0">
+                            <div class="d-flex align-items-center gap-2">
+                                <label class="switch" onclick="toggleStatus(this, <?php echo $row['articleId']; ?>)">
+                                    <input type="hidden" name="status<?php echo $row['articleId']; ?>"
+                                        value="<?php echo $row['status']; ?>">
+                                    <span
+                                        class="slider <?php echo ($row["status"] == 1) ? 'active' : (($row["status"] == 0) ? 'pending' : 'inactive'); ?>">
+                                        <?php echo ($row["status"] == 1) ? 'Approved' : (($row["status"] == 0) ? 'Pending' : 'Rejected'); ?>
+                                    </span>
+                                </label>
+                            </div>
+                        </td>
+                        <?php
                     } else {
                         ?>
-            <td class="border-bottom-0 no-click">
-                <div class="d-flex align-items-center gap-2">
-                    <label class="switch">
-                        <span
-                            class="slider <?php echo ($row["status"] == 1) ? 'active' : (($row["status"] == 0) ? 'pending' : 'inactive'); ?>">
-                            <?php echo ($row["status"] == 1) ? 'Approved' : (($row["status"] == 0) ? 'Pending' : 'Rejected'); ?>
-                        </span>
-                    </label>
-                </div>
-            </td>
-            <?php
+                        <td class="border-bottom-0 no-click">
+                            <div class="d-flex align-items-center gap-2">
+                                <label class="switch">
+                                    <span
+                                        class="slider <?php echo ($row["status"] == 1) ? 'active' : (($row["status"] == 0) ? 'pending' : 'inactive'); ?>">
+                                        <?php echo ($row["status"] == 1) ? 'Approved' : (($row["status"] == 0) ? 'Pending' : 'Rejected'); ?>
+                                    </span>
+                                </label>
+                            </div>
+                        </td>
+                        <?php
                     }
                     ?>
 
-            <?php
+                    <?php
                     echo '<td class="border-bottom-0">
                     <button type="button" class="btn btn-primary btn-sm btn-view-details" data-article-id="' . $row["articleId"] . '">View Details</button>
 
@@ -385,150 +385,150 @@ checkAccess([ROLE_MARKETING_COORDINATOR], $conn);
     <!-- End custom js for this page -->
 
     <script>
-    function toggleStatus(label, articleId) {
-        var hiddenInput = label.querySelector('input[type="hidden"]');
-        var slider = label.querySelector('.slider');
+        function toggleStatus(label, articleId) {
+            var hiddenInput = label.querySelector('input[type="hidden"]');
+            var slider = label.querySelector('.slider');
 
-        var status = parseInt(hiddenInput.value);
+            var status = parseInt(hiddenInput.value);
 
-        if (status == 0) {
-            status = 1;
-            slider.innerText = "Approved"; // Thay đổi văn bản cho trạng thái active
-        } else if (status === 1) {
-            status = 2;
-            slider.innerText = "Rejected"; // Thay đổi văn bản cho trạng thái inactive
-        } else {
-            status = 0;
-            slider.innerText = "Pending"; // Thay đổi văn bản cho trạng thái pending
-        }
-
-        hiddenInput.value = status;
-
-        slider.classList.remove('active', 'pending', 'inactive');
-        if (status === 0) {
-            slider.classList.add('pending');
-        } else if (status === 1) {
-            slider.classList.add('active');
-        } else {
-            slider.classList.add('inactive');
-        }
-
-        // Gửi yêu cầu AJAX để cập nhật trạng thái trong cơ sở dữ liệu
-        var xhr = new XMLHttpRequest();
-        xhr.open("POST", "../../Backend/update_status.php", true);
-        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-        xhr.onreadystatechange = function() {
-            if (xhr.readyState == 4 && xhr.status == 200) {
-                // Xử lý phản hồi từ máy chủ nếu cần
-                console.log(xhr.responseText);
-
+            if (status == 0) {
+                status = 1;
+                slider.innerText = "Approved"; // Thay đổi văn bản cho trạng thái active
+            } else if (status === 1) {
+                status = 2;
+                slider.innerText = "Rejected"; // Thay đổi văn bản cho trạng thái inactive
+            } else {
+                status = 0;
+                slider.innerText = "Pending"; // Thay đổi văn bản cho trạng thái pending
             }
-        };
-        xhr.send("articleId=" + articleId + "&status=" + status);
-    }
+
+            hiddenInput.value = status;
+
+            slider.classList.remove('active', 'pending', 'inactive');
+            if (status === 0) {
+                slider.classList.add('pending');
+            } else if (status === 1) {
+                slider.classList.add('active');
+            } else {
+                slider.classList.add('inactive');
+            }
+
+            // Gửi yêu cầu AJAX để cập nhật trạng thái trong cơ sở dữ liệu
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "../../Backend/update_status.php", true);
+            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    // Xử lý phản hồi từ máy chủ nếu cần
+                    console.log(xhr.responseText);
+
+                }
+            };
+            xhr.send("articleId=" + articleId + "&status=" + status);
+        }
 
 
 
-    $(document).ready(function() {
-        function viewDetails(articleId) {
-            // Gửi yêu cầu Ajax để lấy thông tin chi tiết của bài viết
-            $.ajax({
-                url: '../../Backend/get_articles_detail.php',
-                type: 'GET',
-                data: {
-                    articleId: articleId
-                },
-                success: function(response) {
-                    $('#detailsModalBody').html(response);
-                    $('#detailsModal').modal('show');
-                    $('#commentTableBody').html(response);
-                },
-                error: function(xhr, status, error) {
-                    console.error(error);
+        $(document).ready(function () {
+            function viewDetails(articleId) {
+                // Gửi yêu cầu Ajax để lấy thông tin chi tiết của bài viết
+                $.ajax({
+                    url: '../../Backend/get_articles_detail.php',
+                    type: 'GET',
+                    data: {
+                        articleId: articleId
+                    },
+                    success: function (response) {
+                        $('#detailsModalBody').html(response);
+                        $('#detailsModal').modal('show');
+                        $('#commentTableBody').html(response);
+                    },
+                    error: function (xhr, status, error) {
+                        console.error(error);
+                    }
+                });
+            }
+
+            // Sử dụng sự kiện 'click' cho nút xem chi tiết
+            $('.btn-view-details').click(function () {
+                var articleId = $(this).data('article-id');
+                viewDetails(articleId);
+            });
+        });
+
+
+        document.addEventListener("DOMContentLoaded", function () {
+            // Lắng nghe sự kiện khi nhấn nút comment hoặc nút edit comment
+            $('.btn-comment, .btn-edit-comment').click(function () {
+                var articleId = $(this).data('article-id');
+                var action = $(this).data('action');
+                console.log('Action:', action);
+                if (action === 'edit') {
+                    // Nếu là nút edit comment, hiển thị modal chỉ để sửa comment
+                    var commentId = $(this).data('comment-id'); // Lấy ID của comment cần chỉnh sửa
+                    var commentContent = $(this).data(
+                        'comment-content'); // Lấy nội dung của comment cần chỉnh sửa
+
+                    // Đặt giá trị cho form comment modal để sửa comment
+                    $('#articleId').val(articleId);
+                    $('#commentText').val(commentContent);
+                    $('#commentModal .modal-title').text('Edit Comment');
+                    $('#submitComment').text('Save'); // Đổi nút "Submit" thành "Save"
+                    $('#commentModal').modal('show'); // Hiển thị modal form comment để chỉnh sửa comment
+                } else {
+                    // Nếu không phải là nút edit comment, hiển thị modal comment để thêm mới
+                    $('#articleId').val(
+                        articleId); // Đặt giá trị articleId cho trường ẩn trong form comment
+                    $('#commentText').val(''); // Đặt giá trị mặc định cho trường commentText là rỗng
+                    $('#commentModal .modal-title').text('Add Comment');
+                    $('#submitComment').text('Submit'); // Đổi nút "Save" thành "Submit"
+                    $('#commentModal').modal('show'); // Hiển thị modal form comment để thêm mới comment
+                }
+            });
+
+            // Lắng nghe sự kiện khi gửi comment
+            $('#submitComment').click(function () {
+                var formData = $('#commentForm').serialize(); // Lấy dữ liệu từ form comment
+                $.ajax({
+                    url: '../../Backend/process_comment.php', // Script PHP để xử lý comment
+                    type: 'POST',
+                    data: formData,
+                    success: function (response) {
+                        // Hiển thị thông báo SweetAlert2 với nội dung là response
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Success!',
+                            text: response,
+                        }).then((result) => {
+                            // Nếu người dùng nhấn OK, ẩn modal và làm sạch form
+                            if (result.isConfirmed) {
+                                $('#commentModal').modal('hide');
+                                $('#commentForm')[0].reset();
+                            }
+                        });
+                    },
+
+                });
+            });
+
+            // Lắng nghe sự kiện khi đóng modal
+            $('#commentModal').on('hidden.bs.modal', function () {
+                $('#commentForm')[0].reset(); // Xóa các giá trị trong form comment khi đóng modal
+                $('#commentId').val('');
+                $('#articleId').val('');
+            });
+        });
+
+        function toggleNoClick(status) {
+            var elements = document.querySelectorAll('.switch');
+            elements.forEach(function (element) {
+                if (status === true) {
+                    element.classList.add('no-click');
+                } else {
+                    element.classList.remove('no-click');
                 }
             });
         }
-
-        // Sử dụng sự kiện 'click' cho nút xem chi tiết
-        $('.btn-view-details').click(function() {
-            var articleId = $(this).data('article-id');
-            viewDetails(articleId);
-        });
-    });
-
-
-    document.addEventListener("DOMContentLoaded", function() {
-        // Lắng nghe sự kiện khi nhấn nút comment hoặc nút edit comment
-        $('.btn-comment, .btn-edit-comment').click(function() {
-            var articleId = $(this).data('article-id');
-            var action = $(this).data('action');
-            console.log('Action:', action);
-            if (action === 'edit') {
-                // Nếu là nút edit comment, hiển thị modal chỉ để sửa comment
-                var commentId = $(this).data('comment-id'); // Lấy ID của comment cần chỉnh sửa
-                var commentContent = $(this).data(
-                    'comment-content'); // Lấy nội dung của comment cần chỉnh sửa
-
-                // Đặt giá trị cho form comment modal để sửa comment
-                $('#articleId').val(articleId);
-                $('#commentText').val(commentContent);
-                $('#commentModal .modal-title').text('Edit Comment');
-                $('#submitComment').text('Save'); // Đổi nút "Submit" thành "Save"
-                $('#commentModal').modal('show'); // Hiển thị modal form comment để chỉnh sửa comment
-            } else {
-                // Nếu không phải là nút edit comment, hiển thị modal comment để thêm mới
-                $('#articleId').val(
-                    articleId); // Đặt giá trị articleId cho trường ẩn trong form comment
-                $('#commentText').val(''); // Đặt giá trị mặc định cho trường commentText là rỗng
-                $('#commentModal .modal-title').text('Add Comment');
-                $('#submitComment').text('Submit'); // Đổi nút "Save" thành "Submit"
-                $('#commentModal').modal('show'); // Hiển thị modal form comment để thêm mới comment
-            }
-        });
-
-        // Lắng nghe sự kiện khi gửi comment
-        $('#submitComment').click(function() {
-            var formData = $('#commentForm').serialize(); // Lấy dữ liệu từ form comment
-            $.ajax({
-                url: '../../Backend/process_comment.php', // Script PHP để xử lý comment
-                type: 'POST',
-                data: formData,
-                success: function(response) {
-                    // Hiển thị thông báo SweetAlert2 với nội dung là response
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Success!',
-                        text: response,
-                    }).then((result) => {
-                        // Nếu người dùng nhấn OK, ẩn modal và làm sạch form
-                        if (result.isConfirmed) {
-                            $('#commentModal').modal('hide');
-                            $('#commentForm')[0].reset();
-                        }
-                    });
-                },
-
-            });
-        });
-
-        // Lắng nghe sự kiện khi đóng modal
-        $('#commentModal').on('hidden.bs.modal', function() {
-            $('#commentForm')[0].reset(); // Xóa các giá trị trong form comment khi đóng modal
-            $('#commentId').val('');
-            $('#articleId').val('');
-        });
-    });
-
-    function toggleNoClick(status) {
-        var elements = document.querySelectorAll('.switch');
-        elements.forEach(function(element) {
-            if (status === true) {
-                element.classList.add('no-click');
-            } else {
-                element.classList.remove('no-click');
-            }
-        });
-    }
     </script>
 
 
