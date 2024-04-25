@@ -2,19 +2,30 @@
 <html>
 
 <head>
-    <link rel="stylesheet" href="../../css/login-style.css">
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.6/dist/sweetalert2.all.min.js"></script>
-    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.6/dist/sweetalert2.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <style>
+	<link rel="stylesheet" href="../../css/login-style.css">
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.6/dist/sweetalert2.all.min.js"></script>
+	<link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.6/dist/sweetalert2.min.css" rel="stylesheet">
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+	<style>
 
-    </style>
+	</style>
 </head>
 
 <body>
-    <?php
+	<?php
 	include_once ("../../connect.php");
 	session_start();
+	if (isset($_SESSION['message'])) {
+		echo '<script>';
+		echo 'Swal.fire({';
+		echo '    title: "Send mail reset password successful",';
+		echo '    text: "Message sent, please check your email.",';
+		echo '    icon: "success"';
+		echo '})';
+		echo '</script>';
+		unset($_SESSION['message']);
+	}
+
 	if (isset($_POST['register'])) {
 		$username = $_POST['username'];
 		$password = $_POST['password'];
@@ -27,6 +38,13 @@
 		$check_username_query = "SELECT * FROM users WHERE username = '$username'";
 		$check_username_result = $conn->query($check_username_query);
 
+		// Check if the email already exists
+		$check_email_query = "SELECT * FROM users WHERE email = '$email'";
+		$check_email_result = $conn->query($check_email_query);
+
+		// Regular expression to validate password
+		$password_pattern = '/^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()\-_=+{};:,<.>ยง~])(?=.*[a-z]).{8,}$/';
+
 		// Array to store error messages
 		$errors = array();
 
@@ -35,10 +53,14 @@
 			$errors[] = "Please fill in all fields.";
 		} else if ($check_username_result->num_rows > 0) {
 			$errors[] = "Username already exists. Please choose another username.";
+		} else if ($check_email_result->num_rows > 0) {
+			$errors[] = "Email already exists. Please choose another email.";
 		} else if ($password !== $confirmPassword) {
 			$errors[] = "Passwords do not match. Please try again.";
 		} else if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
 			$errors[] = "Invalid email address. Please enter a valid email.";
+		} else if (!preg_match($password_pattern, $password)) {
+			$errors[] = "Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character.";
 		}
 
 		// If there are errors, display an alert box and redirect back to the registration page
@@ -117,7 +139,7 @@
 			if ($status == 0) {
 				echo '<script>';
 				echo 'Swal.fire({';
-				echo '    title: "Account not approved",';
+				echo '    title: "Account pending approval",';
 				echo '    text: "Please contact the administrator.",';
 				echo '    icon: "warning"';
 				echo '}).then(function() {';
@@ -216,40 +238,40 @@
 	}
 
 	?>
-    <div id="container" class="container">
-        <!-- FORM SECTION -->
-        <div class="row">
-            <!-- SIGN UP -->
-            <div class="col align-items-center flex-col sign-up">
-                <div class="form-wrapper align-items-center">
-                    <div class="form sign-up">
-                        <form action="#" method="post">
-                            <input type="hidden" name="register" value="1">
-                            <div class="input-group">
-                                <i class='bx bxs-user'></i>
-                                <input type="name" name="name" placeholder="Name" />
-                            </div>
-                            <div class="input-group">
-                                <i class='bx bxs-user'></i>
-                                <input type="username" name="username" placeholder="User name" />
-                            </div>
-                            <div class="input-group">
-                                <i class='bx bx-mail-send'></i>
-                                <input type="email" name="email" placeholder="Email" />
-                            </div>
-                            <div class="input-group">
-                                <i class='bx bxs-lock-alt'></i>
-                                <input type="password" name="password" placeholder="Password" />
-                            </div>
-                            <div class="input-group">
-                                <i class='bx bxs-lock-alt'></i>
-                                <input type="password" name="confirm_password" placeholder="Confirm Password" />
-                            </div>
-                            <div class="input-group">
-                                <i class='bx bxs-lock-alt'></i>
-                                <select id="facultyInput" name="faculty">
-                                    <option value="" selected disabled>Select faculty/department</option>
-                                    <?php
+	<div id="container" class="container">
+		<!-- FORM SECTION -->
+		<div class="row">
+			<!-- SIGN UP -->
+			<div class="col align-items-center flex-col sign-up">
+				<div class="form-wrapper align-items-center">
+					<div class="form sign-up">
+						<form action="#" method="post">
+							<input type="hidden" name="register" value="1">
+							<div class="input-group">
+								<i class='bx bxs-user'></i>
+								<input type="name" name="name" placeholder="Name" />
+							</div>
+							<div class="input-group">
+								<i class='bx bxs-user'></i>
+								<input type="username" name="username" placeholder="User name" />
+							</div>
+							<div class="input-group">
+								<i class='bx bx-mail-send'></i>
+								<input type="email" name="email" placeholder="Email" />
+							</div>
+							<div class="input-group">
+								<i class='bx bxs-lock-alt'></i>
+								<input type="password" name="password" placeholder="Password" />
+							</div>
+							<div class="input-group">
+								<i class='bx bxs-lock-alt'></i>
+								<input type="password" name="confirm_password" placeholder="Confirm Password" />
+							</div>
+							<div class="input-group">
+								<i class='bx bxs-lock-alt'></i>
+								<select id="facultyInput" name="faculty">
+									<option value="1" selected disabled>Select faculty</option>
+									<?php
 									// Query the database to retrieve the list of faculties/departments
 									$queryFaculties = "SELECT facultyId, facultyName FROM faculties";
 									$resultFaculties = mysqli_query($conn, $queryFaculties);
@@ -267,110 +289,110 @@
 									// Close the database connection
 									mysqli_close($conn);
 									?>
-                                </select>
-                            </div>
-                            <button>
-                                Sign up
-                            </button>
-                            <p>
-                                <span>
-                                    Already have an account?
-                                </span>
-                                <b onclick="toggle()" class="pointer">
-                                    Sign in here
-                                </b>
-                            </p>
-                        </form>
-                    </div>
-                </div>
+								</select>
+							</div>
+							<button name="register">
+								Sign up
+							</button>
+							<p>
+								<span>
+									Already have an account?
+								</span>
+								<b onclick="toggle()" class="pointer">
+									Sign in here
+								</b>
+							</p>
+						</form>
+					</div>
+				</div>
 
-            </div>
-            <!-- END SIGN UP -->
-            <!-- SIGN IN -->
-            <div class="col align-items-center flex-col sign-in">
-                <div class="form-wrapper align-items-center">
+			</div>
+			<!-- END SIGN UP -->
+			<!-- SIGN IN -->
+			<div class="col align-items-center flex-col sign-in">
+				<div class="form-wrapper align-items-center">
 
-                    <div class="form sign-in">
-                        <form action="#" method="post">
-                            <input type="hidden" name="signin" value="1">
-                            <div class="input-group">
-                                <i class='bx bxs-user'></i>
-                                <input type="username" name="username" placeholder="User name" />
-                            </div>
-                            <div class="input-group">
-                                <i class='bx bxs-lock-alt'></i>
-                                <input type="password" name="password" placeholder="Password" />
-                            </div>
-                            <button type="submit">Sign In</button>
-                            <p>
-                                <a href='forgot-password.php'>
-                                    Forgot password?
-                                </a>
-                            </p>
-                            <p>
-                                <span>
-                                    Don't have an account?
-                                </span>
-                                <b onclick="toggle()" class="pointer">
-                                    Sign up here
-                                </b>
-                            </p>
-                        </form>
+					<div class="form sign-in">
+						<form action="#" method="post">
+							<input type="hidden" name="signin" value="1">
+							<div class="input-group">
+								<i class='bx bxs-user'></i>
+								<input type="username" name="username" placeholder="User name" />
+							</div>
+							<div class="input-group">
+								<i class='bx bxs-lock-alt'></i>
+								<input type="password" name="password" placeholder="Password" />
+							</div>
+							<button type="submit">Sign In</button>
+							<p>
+								<a href='forgot-password.php'>
+									Forgot password?
+								</a>
+							</p>
+							<p>
+								<span>
+									Don't have an account?
+								</span>
+								<b onclick="toggle()" class="pointer">
+									Sign up here
+								</b>
+							</p>
+						</form>
 
-                    </div>
+					</div>
 
-                </div>
-                <div class="form-wrapper">
+				</div>
+				<div class="form-wrapper">
 
-                </div>
-            </div>
-            <!-- END SIGN IN -->
-        </div>
-        <!-- END FORM SECTION -->
-        <!-- CONTENT SECTION -->
-        <div class="row content-row">
-            <!-- SIGN IN CONTENT -->
-            <div class="col align-items-center flex-col">
-                <div class="text sign-in">
-                    <h2>
-                        Welcome
-                    </h2>
+				</div>
+			</div>
+			<!-- END SIGN IN -->
+		</div>
+		<!-- END FORM SECTION -->
+		<!-- CONTENT SECTION -->
+		<div class="row content-row">
+			<!-- SIGN IN CONTENT -->
+			<div class="col align-items-center flex-col">
+				<div class="text sign-in">
+					<h2>
+						Welcome
+					</h2>
 
-                </div>
-                <div class="img sign-in">
+				</div>
+				<div class="img sign-in">
 
-                </div>
-            </div>
-            <!-- END SIGN IN CONTENT -->
-            <!-- SIGN UP CONTENT -->
-            <div class="col align-items-center flex-col">
-                <div class="img sign-up">
+				</div>
+			</div>
+			<!-- END SIGN IN CONTENT -->
+			<!-- SIGN UP CONTENT -->
+			<div class="col align-items-center flex-col">
+				<div class="img sign-up">
 
-                </div>
-                <div class="text sign-up">
-                    <h2>
-                        Join with us
-                    </h2>
+				</div>
+				<div class="text sign-up">
+					<h2>
+						Join with us
+					</h2>
 
-                </div>
-            </div>
-            <!-- END SIGN UP CONTENT -->
-        </div>
-        <!-- END CONTENT SECTION -->
-    </div>
+				</div>
+			</div>
+			<!-- END SIGN UP CONTENT -->
+		</div>
+		<!-- END CONTENT SECTION -->
+	</div>
 
-    <script src="../../js/login-animation.js"></script>
-    <script>
-    function showSuccessAlert() {
-        Swal.fire({
-            title: "Good job!",
-            text: "Login successful!",
-            icon: "success"
-        }).then(function() {
-            window.location.href = "../../index.php"; // Redirect after the user clicks the button in the alert
-        });
-    }
-    </script>
+	<script src="../../js/login-animation.js"></script>
+	<script>
+		function showSuccessAlert() {
+			Swal.fire({
+				title: "Good job!",
+				text: "Login successful!",
+				icon: "success"
+			}).then(function () {
+				window.location.href = "../../index.php"; // Redirect after the user clicks the button in the alert
+			});
+		}
+	</script>
 </body>
 
 </html>

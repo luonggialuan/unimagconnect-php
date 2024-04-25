@@ -75,8 +75,11 @@ if (isset($_POST["SubmitNew"]) && !empty($_FILES["files"]["name"][0])) {
     $target_image_file = $target_dir_image_article . $file_image_name;
     $imageFileType = strtolower(pathinfo($target_image_file, PATHINFO_EXTENSION));
 
-    if (!check_image($file_image_name, $imageFileType, $_FILES["image"]["size"], $target_dir_image_article))
+    if (!check_image($file_image_name, $imageFileType, $_FILES["image"]["size"], $target_dir_image_article)) {
+        echo "<script>window.history.go(-1);</script>";
         return;
+    }
+
 
     foreach ($_FILES["files"]["name"] as $key => $value) {
         $file_name = basename($value);

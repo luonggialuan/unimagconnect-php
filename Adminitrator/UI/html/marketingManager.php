@@ -103,8 +103,7 @@ if (isset ($_SESSION['returnError']) && $_SESSION['returnError'] !== null) {
     echo "    icon: 'error',"; // 'Errors' corrected to 'error'
     echo "    title: '" . $title . "',"; // concatenate $title variable
     echo "    showConfirmButton: true,";
-    echo "    timer: 3000";
-    echo "});";
+    echo "})";
     echo "</script>";
 
     unset($_SESSION['returnError']);
@@ -118,7 +117,6 @@ if (isset ($_SESSION['return']) && $_SESSION['return'] !== null) {
     echo "    icon: 'success',";
     echo "    title: '$title',";
     echo "    showConfirmButton: true,";
-    echo "    timer: 3000";
     echo "});";
     echo "</script>";
 
@@ -133,7 +131,6 @@ if (isset ($_SESSION['returnInfo']) && $_SESSION['returnInfo'] !== null) {
     echo "    icon: 'info',";
     echo "    title: '$title',";
     echo "    showConfirmButton: true,";
-    echo "    timer: 3000";
     echo "});";
     echo "</script>";
 

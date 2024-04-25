@@ -43,4 +43,9 @@ if ($conn->affected_rows) {
 
     }
 }
-echo "Message sent, please check your inbox.";
+session_start();
+$_SESSION['message'] = 'Message sent, please check your email.';
+
+// echo "Message sent, please check your inbox.";
+header("Location: signin.php");
+exit;
