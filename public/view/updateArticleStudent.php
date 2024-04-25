@@ -115,8 +115,8 @@ $resultFile = $conn->query($sql_article_files);
                                     <div class="mb-3 form-check">
                                         <input type="checkbox" class="form-check-input" id="confirmation_checkbox"
                                             name="confirmation_checkbox" required>
-                                        <label class="form-check-label" for="confirmation_checkbox">I confirm that
-                                            the information provided is accurate</label>
+                                        <label class="form-check-label" for="confirmation_checkbox">I agree with Terms
+                                            and Conditions</label>
                                     </div>
                                     <button id="Update" name="Update" type="submit"
                                         class="btn btn-primary d-block mx-auto">Update</button>
@@ -158,5 +158,77 @@ document.getElementById('files').addEventListener('change', function() {
 
         selectedFilesDiv.appendChild(fileDiv);
     }
+});
+</script>
+<script>
+document.getElementById('confirmation_checkbox').addEventListener('click', function() {
+    Swal.fire({
+        title: 'Terms and Conditions for Report Submission',
+        html: `
+            <div style="max-width: 100%; margin: 0 auto; padding: 0 20px;">
+                <ol style="padding-left: 0;">
+                    <li>
+                        <h3 style="text-align: left;">Content Ownership:</h3>
+                        <p style="text-align: justify;">By submitting a report, you affirm that you are the rightful owner of the content or have the necessary permissions to submit it. You retain ownership of the intellectual property rights to your submitted reports.</p>
+                    </li>
+
+                    <li>
+                        <h3 style="text-align: left;">Originality and Attribution:</h3>
+                        <p style="text-align: justify;">You agree that all reports submitted are original works created by you and do not infringe upon the intellectual property rights of any third party. Proper attribution must be provided for any referenced or cited materials.</p>
+                    </li>
+
+                    <li>
+                        <h3 style="text-align: left;">Accuracy and Legality:</h3>
+                        <p style="text-align: justify;">You are solely responsible for the accuracy and legality of the content submitted. The report must not contain any false, misleading, or unlawful information.</p>
+                    </li>
+
+                    <li>
+                        <h3 style="text-align: left;">Non-Commercial Use:</h3>
+                        <p style="text-align: justify;">Reports submitted must not be used for commercial purposes unless explicit permission is granted by the rightful owner of the content.</p>
+                    </li>
+
+                    <li>
+                        <h3 style="text-align: left;">Compliance with Guidelines:</h3>
+                        <p style="text-align: justify;">All submitted reports must adhere to the formatting and content guidelines provided by the platform. Failure to comply may result in the rejection of the submission.</p>
+                    </li>
+
+                    <li>
+                        <h3 style="text-align: left;">Use of Submitted Reports:</h3>
+                        <p style="text-align: justify;">By submitting a report, you grant the platform the non-exclusive right to use, reproduce, modify, adapt, publish, translate, distribute, and display the content worldwide in any media.</p>
+                    </li>
+
+                    <li>
+                        <h3 style="text-align: left;">Indemnification:</h3>
+                        <p style="text-align: justify;">You agree to indemnify and hold harmless the platform and its affiliates from any claims, damages, liabilities, costs, or expenses arising out of the submission of your report or any breach of these terms and conditions.</p>
+                    </li>
+
+                    <li>
+                        <h3 style="text-align: left;">Termination of Access:</h3>
+                        <p style="text-align: justify;">The platform reserves the right to terminate access to the submission feature for users who violate these terms and conditions or engage in any form of misconduct.</p>
+                    </li>
+                </ol>
+
+                <p style="text-align: justify;">By submitting a report, you acknowledge that you have read, understood, and agree to abide by all the terms and conditions outlined above regarding the submission of reports.</p>
+
+                <input type="checkbox" id="acceptCheckbox" >
+                <label for="acceptCheckbox" style="text-align: left;">I have read and agree to the terms.</label>
+            </div>
+            `,
+        showCancelButton: true,
+        confirmButtonText: 'Accept',
+        cancelButtonText: 'Cancel',
+        focusConfirm: false,
+        preConfirm: () => {
+            if (!document.getElementById('acceptCheckbox').checked) {
+                Swal.showValidationMessage('Please agree to the terms.');
+            }
+        }
+    }).then((result) => {
+        if (result.isConfirmed) {
+            document.getElementById('articleForm').submit();
+        } else if (result.dismiss === Swal.DismissReason.cancel) {
+            document.getElementById('confirmation_checkbox').checked = false;
+        }
+    });
 });
 </script>

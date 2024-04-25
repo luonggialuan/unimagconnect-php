@@ -204,6 +204,13 @@ if (isset($_POST["Update"])) {
         $sql_article = "UPDATE `articles` SET `title` = '$title', `content` = '$content', `image` = '$target_image'
         WHERE articles.articleId = $article_id 
         AND articles.authorId = $user_id";
+
+        if ($conn->query($sql_article)) {
+            $_SESSION['return'] = "Your article have been updated successfully.";
+            echo "<script>window.history.go(-1);</script>";
+        }
+        return;
+
         if ($conn->error) {
             $_SESSION['return'] = 'Error inserting file: ' . $conn->error;
             echo "<script>window.history.go(-1);</script>";

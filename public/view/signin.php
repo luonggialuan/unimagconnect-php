@@ -2,17 +2,17 @@
 <html>
 
 <head>
-	<link rel="stylesheet" href="../../css/login-style.css">
-	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.6/dist/sweetalert2.all.min.js"></script>
-	<link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.6/dist/sweetalert2.min.css" rel="stylesheet">
-	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-	<style>
+    <link rel="stylesheet" href="../../css/login-style.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.6/dist/sweetalert2.all.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.6/dist/sweetalert2.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
 
-	</style>
+    </style>
 </head>
 
 <body>
-	<?php
+    <?php
 	include_once ("../../connect.php");
 	session_start();
 	if (isset($_SESSION['message'])) {
@@ -204,7 +204,7 @@
 					echo '});';
 					echo 'setTimeout(function() {';
 					echo '    window.location.href = "../../Adminitrator/UI/html/index.php";'; // Redirect to the admin page after a delay
-					echo '}, 1500);'; // Delay in milliseconds, e.g., 2000ms = 2 seconds
+					echo '}, 3000);'; // Delay in milliseconds, e.g., 2000ms = 2 seconds
 					echo '</script>';
 				}
 			} else {
@@ -238,40 +238,40 @@
 	}
 
 	?>
-	<div id="container" class="container">
-		<!-- FORM SECTION -->
-		<div class="row">
-			<!-- SIGN UP -->
-			<div class="col align-items-center flex-col sign-up">
-				<div class="form-wrapper align-items-center">
-					<div class="form sign-up">
-						<form action="#" method="post">
-							<input type="hidden" name="register" value="1">
-							<div class="input-group">
-								<i class='bx bxs-user'></i>
-								<input type="name" name="name" placeholder="Name" />
-							</div>
-							<div class="input-group">
-								<i class='bx bxs-user'></i>
-								<input type="username" name="username" placeholder="User name" />
-							</div>
-							<div class="input-group">
-								<i class='bx bx-mail-send'></i>
-								<input type="email" name="email" placeholder="Email" />
-							</div>
-							<div class="input-group">
-								<i class='bx bxs-lock-alt'></i>
-								<input type="password" name="password" placeholder="Password" />
-							</div>
-							<div class="input-group">
-								<i class='bx bxs-lock-alt'></i>
-								<input type="password" name="confirm_password" placeholder="Confirm Password" />
-							</div>
-							<div class="input-group">
-								<i class='bx bxs-lock-alt'></i>
-								<select id="facultyInput" name="faculty">
-									<option value="1" selected disabled>Select faculty</option>
-									<?php
+    <div id="container" class="container">
+        <!-- FORM SECTION -->
+        <div class="row">
+            <!-- SIGN UP -->
+            <div class="col align-items-center flex-col sign-up">
+                <div class="form-wrapper align-items-center">
+                    <div class="form sign-up">
+                        <form action="#" method="post">
+                            <input type="hidden" name="register" value="1">
+                            <div class="input-group">
+                                <i class='bx bxs-user'></i>
+                                <input type="name" name="name" placeholder="Name" />
+                            </div>
+                            <div class="input-group">
+                                <i class='bx bxs-user'></i>
+                                <input type="username" name="username" placeholder="User name" />
+                            </div>
+                            <div class="input-group">
+                                <i class='bx bx-mail-send'></i>
+                                <input type="email" name="email" placeholder="Email" />
+                            </div>
+                            <div class="input-group">
+                                <i class='bx bxs-lock-alt'></i>
+                                <input type="password" name="password" placeholder="Password" />
+                            </div>
+                            <div class="input-group">
+                                <i class='bx bxs-lock-alt'></i>
+                                <input type="password" name="confirm_password" placeholder="Confirm Password" />
+                            </div>
+                            <div class="input-group">
+                                <i class='bx bxs-lock-alt'></i>
+                                <select id="facultyInput" name="faculty">
+                                    <option value="1" selected disabled>Select faculty</option>
+                                    <?php
 									// Query the database to retrieve the list of faculties/departments
 									$queryFaculties = "SELECT facultyId, facultyName FROM faculties";
 									$resultFaculties = mysqli_query($conn, $queryFaculties);
@@ -289,110 +289,110 @@
 									// Close the database connection
 									mysqli_close($conn);
 									?>
-								</select>
-							</div>
-							<button name="register">
-								Sign up
-							</button>
-							<p>
-								<span>
-									Already have an account?
-								</span>
-								<b onclick="toggle()" class="pointer">
-									Sign in here
-								</b>
-							</p>
-						</form>
-					</div>
-				</div>
+                                </select>
+                            </div>
+                            <button name="register">
+                                Sign up
+                            </button>
+                            <p>
+                                <span>
+                                    Already have an account?
+                                </span>
+                                <b onclick="toggle()" class="pointer">
+                                    Sign in here
+                                </b>
+                            </p>
+                        </form>
+                    </div>
+                </div>
 
-			</div>
-			<!-- END SIGN UP -->
-			<!-- SIGN IN -->
-			<div class="col align-items-center flex-col sign-in">
-				<div class="form-wrapper align-items-center">
+            </div>
+            <!-- END SIGN UP -->
+            <!-- SIGN IN -->
+            <div class="col align-items-center flex-col sign-in">
+                <div class="form-wrapper align-items-center">
 
-					<div class="form sign-in">
-						<form action="#" method="post">
-							<input type="hidden" name="signin" value="1">
-							<div class="input-group">
-								<i class='bx bxs-user'></i>
-								<input type="username" name="username" placeholder="User name" />
-							</div>
-							<div class="input-group">
-								<i class='bx bxs-lock-alt'></i>
-								<input type="password" name="password" placeholder="Password" />
-							</div>
-							<button type="submit">Sign In</button>
-							<p>
-								<a href='forgot-password.php'>
-									Forgot password?
-								</a>
-							</p>
-							<p>
-								<span>
-									Don't have an account?
-								</span>
-								<b onclick="toggle()" class="pointer">
-									Sign up here
-								</b>
-							</p>
-						</form>
+                    <div class="form sign-in">
+                        <form action="#" method="post">
+                            <input type="hidden" name="signin" value="1">
+                            <div class="input-group">
+                                <i class='bx bxs-user'></i>
+                                <input type="username" name="username" placeholder="User name" />
+                            </div>
+                            <div class="input-group">
+                                <i class='bx bxs-lock-alt'></i>
+                                <input type="password" name="password" placeholder="Password" />
+                            </div>
+                            <button type="submit">Sign In</button>
+                            <p>
+                                <a href='forgot-password.php'>
+                                    Forgot password?
+                                </a>
+                            </p>
+                            <p>
+                                <span>
+                                    Don't have an account?
+                                </span>
+                                <b onclick="toggle()" class="pointer">
+                                    Sign up here
+                                </b>
+                            </p>
+                        </form>
 
-					</div>
+                    </div>
 
-				</div>
-				<div class="form-wrapper">
+                </div>
+                <div class="form-wrapper">
 
-				</div>
-			</div>
-			<!-- END SIGN IN -->
-		</div>
-		<!-- END FORM SECTION -->
-		<!-- CONTENT SECTION -->
-		<div class="row content-row">
-			<!-- SIGN IN CONTENT -->
-			<div class="col align-items-center flex-col">
-				<div class="text sign-in">
-					<h2>
-						Welcome
-					</h2>
+                </div>
+            </div>
+            <!-- END SIGN IN -->
+        </div>
+        <!-- END FORM SECTION -->
+        <!-- CONTENT SECTION -->
+        <div class="row content-row">
+            <!-- SIGN IN CONTENT -->
+            <div class="col align-items-center flex-col">
+                <div class="text sign-in">
+                    <h2>
+                        Welcome
+                    </h2>
 
-				</div>
-				<div class="img sign-in">
+                </div>
+                <div class="img sign-in">
 
-				</div>
-			</div>
-			<!-- END SIGN IN CONTENT -->
-			<!-- SIGN UP CONTENT -->
-			<div class="col align-items-center flex-col">
-				<div class="img sign-up">
+                </div>
+            </div>
+            <!-- END SIGN IN CONTENT -->
+            <!-- SIGN UP CONTENT -->
+            <div class="col align-items-center flex-col">
+                <div class="img sign-up">
 
-				</div>
-				<div class="text sign-up">
-					<h2>
-						Join with us
-					</h2>
+                </div>
+                <div class="text sign-up">
+                    <h2>
+                        Join with us
+                    </h2>
 
-				</div>
-			</div>
-			<!-- END SIGN UP CONTENT -->
-		</div>
-		<!-- END CONTENT SECTION -->
-	</div>
+                </div>
+            </div>
+            <!-- END SIGN UP CONTENT -->
+        </div>
+        <!-- END CONTENT SECTION -->
+    </div>
 
-	<script src="../../js/login-animation.js"></script>
-	<script>
-		function showSuccessAlert() {
-			Swal.fire({
-				title: "Good job!",
-				text: "Login successful!",
-				icon: "success"
-			}).then(function () {
-				window.location.href = "../../index.php"; // Redirect after the user clicks the button in the alert
-			});
-		}
-	</script>
+    <script src="../../js/login-animation.js"></script>
+    <script>
+    function showSuccessAlert() {
+        Swal.fire({
+            title: "Good job!",
+            text: "Login successful!",
+            icon: "success"
+        }).then(function() {
+            window.location.href = "../../index.php"; // Redirect after the user clicks the button in the alert
+        });
+    }
+    </script>
 </body>
 
 </html>
